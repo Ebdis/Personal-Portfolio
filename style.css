@@ -1,0 +1,228 @@
+/* ===============================
+   Modern Portfolio CSS (Animated)
+   Works with your existing HTML/JS
+   =============================== */
+
+/* -------- Theme Tokens -------- */
+html {
+  scroll-behavior: smooth;
+}
+
+:root{
+  --bg: #0b0f17;
+  --surface: #101726;
+  --text: #e8eef6;
+  --muted: #aab7c8;
+  --brand1: #7c5cff; /* change these two for a new vibe */
+  --brand2: #22d3ee;
+  --ring: rgba(124,92,255,.35);
+  --card: rgba(255,255,255,.06);
+  --border: rgba(255,255,255,.12);
+  --shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+/* Optional light mode toggle if you add data-theme="light" on <html> */
+html[data-theme="light"]{
+  --bg:#f7f9fc; --surface:#ffffff; --text:#0e1726; --muted:#5b6471;
+  --brand1:#6d28d9; --brand2:#0ea5b7; --ring:rgba(109,40,217,.25);
+  --card: rgba(14,23,38,.04); --border: rgba(14,23,38,.12);
+  --shadow: 0 18px 40px rgba(17,24,39,.14);
+}
+
+/* -------- Base -------- */
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* Animated gradient backdrop */
+.backdrop{
+  position: fixed; inset: -30vmax; z-index:-1; pointer-events:none;
+  filter: blur(80px) saturate(1.25); opacity:.55; transform: translateZ(0);
+  background:
+    radial-gradient(40% 40% at 20% 20%, color-mix(in oklab, var(--brand1) 45%, transparent) , transparent 60%),
+    radial-gradient(45% 45% at 90% 10%, color-mix(in oklab, var(--brand2) 35%, transparent), transparent 60%),
+    radial-gradient(35% 35% at 50% 80%, color-mix(in oklab, var(--brand1) 30%, transparent), transparent 60%);
+  animation: floatBg 16s ease-in-out infinite alternate;
+}
+@keyframes floatBg{
+  0%{ transform: translate(-2%, -2%) scale(1.0); }
+  100%{ transform: translate(2%, 2%) scale(1.05); }
+}
+
+/* Containers & Sections */
+section{padding: clamp(56px, 8vw, 96px) 20px}
+.container{max-width: 1100px; margin-inline:auto}
+
+/* -------- Header / Nav -------- */
+header{
+  position: sticky; top:0; z-index:100;
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+nav{
+  max-width: 1100px; margin:auto; min-height:64px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 10px 20px;
+}
+nav h1{
+  font-weight:800; letter-spacing:.4px; display:flex; align-items:center; gap:10px;
+}
+nav h1::before{
+  content:""; width:10px; height:10px; border-radius:999px; display:inline-block;
+  background: conic-gradient(from 0deg, var(--brand1), var(--brand2));
+  box-shadow: 0 0 0 6px var(--ring);
+}
+nav ul{display:flex; gap:22px; list-style:none; padding:0; margin:0}
+nav a{
+  color: var(--muted); text-decoration:none; font-weight:600; position:relative;
+  transition: color .2s ease;
+}
+nav a:hover{color:var(--text)}
+nav a::after{
+  content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+  background: linear-gradient(90deg, var(--brand1), var(--brand2));
+  transform: scaleX(0); transform-origin:left; transition: transform .25s ease;
+}
+nav a:hover::after{ transform: scaleX(1); }
+
+/* -------- Hero / About / Projects / Contact shared styles -------- */
+h2{
+  font-size: clamp(26px, 4vw, 40px);
+  line-height:1.15; text-align:center; margin: 0 0 10px;
+}
+section > p{
+  color: var(--muted); text-align:center; max-width: 70ch; margin: 0 auto;
+}
+
+/* Panels & Cards (glassmorphism) */
+.panel, .card{
+   background: rgba(255, 255, 255, 0.05); /* lighter glass look */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+/* Project grid */
+#projects .grid{
+  margin-top: 26px;
+  display:grid; gap:18px;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+@media (max-width: 1024px){ #projects .grid{grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 680px){ #projects .grid{grid-template-columns: 1fr;} }
+
+.card{
+  padding: 22px; position:relative; overflow:hidden; isolation:isolate;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.card::after{
+  content:""; position:absolute; inset:-2px; z-index:-1; filter: blur(24px); opacity:.18;
+  background: conic-gradient(from 0deg, var(--brand1), transparent 25%, var(--brand2) 55%, transparent 75%, var(--brand1));
+}
+.card:hover{
+  transform: translateY(-6px);
+  border-color: color-mix(in oklab, var(--brand1) 22%, var(--border));
+  box-shadow: 0 26px 70px rgba(0,0,0,.45);
+}
+.card h3{margin: 4px 0 6px; font-size: clamp(18px, 2.4vw, 22px)}
+.card p{color: var(--muted)}
+.card .actions{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap}
+
+/* -------- Smart Buttons -------- */
+.btn{
+  --grad: linear-gradient(135deg, var(--brand1), var(--brand2));
+  display:inline-flex; align-items:center; gap:10px;
+  padding: 12px 16px; border-radius: 999px; font-weight:800; letter-spacing:.3px;
+  color:#0b0f17; text-decoration:none; position:relative; cursor:pointer;
+  background: var(--grad); border: 0;
+  box-shadow: 0 10px 30px color-mix(in oklab, var(--brand2) 30%, transparent);
+  transform: translateZ(0); transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.btn:hover{ transform: translateY(-3px) scale(1.03); filter: saturate(1.1); }
+.btn:active{ transform: translateY(-1px) scale(.99); }
+.btn.ghost{
+  background: transparent; color: var(--text); border:1px solid var(--border);
+  box-shadow: none;
+}
+.btn.ghost:hover{ border-color: color-mix(in oklab, var(--brand1) 28%, var(--border)); }
+
+/* -------- Contact Section -------- */
+#contact .contact-text{ margin-top: 6px }
+#contact .contact-panel{
+  margin: 22px auto 0; max-width: 720px; padding: 24px;
+}
+#contact .cta{
+  display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top: 12px;
+}
+#contact .email{
+  font-weight:700; color: var(--text);
+  border-bottom: 1px dashed color-mix(in oklab, var(--brand2) 40%, var(--border));
+}
+
+/* If you’re using a mailto button only */
+#contact .btn-mail{
+  font-size: 16px;
+}
+
+/* -------- Footer -------- */
+footer{
+  border-top:1px solid var(--border);
+  color: var(--muted);
+  text-align:center; padding: 22px;
+  background: color-mix(in oklab, var(--bg) 85%, transparent);
+}
+
+/* -------- Fancy Hero Helper (optional if you wrap About in .panel) -------- */
+.hero{
+  display:grid; grid-template-columns: 1.25fr .75fr; gap:20px; align-items:center;
+}
+@media (max-width: 860px){ .hero{ grid-template-columns:1fr; } }
+
+/* -------- Motion: Scroll Reveal -------- */
+.fade-in{ opacity:1; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+.fade-in.visible{ opacity:1; transform:none; }
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce){
+  .backdrop{ animation: none }
+  .fade-in{ transition:none }
+  .btn{ transition:none }
+  .card{ transition:none }
+}
+
+/* -------- Helpful Utilities -------- */
+.center{ text-align:center }
+.mt-1{ margin-top: .25rem } .mt-2{ margin-top: .5rem } .mt-3{ margin-top: .75rem }
+.mt-4{ margin-top: 1rem } .mt-6{ margin-top: 1.5rem } .mt-8{ margin-top: 2rem }
+
+#resume {
+  padding: 60px;
+  text-align: center;
+}
+
+#resume .btn {
+  background: linear-gradient(135deg, #7c5cff, #22d3ee);
+  padding: 14px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+#resume .btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Pulse Animation for Resume Button */
+.pulse {
+  animation: pulse 1.8s infinite;
+}
